@@ -10,47 +10,30 @@ class IterableService
 
   def create_user
     # update user API itself is used to create user
-    uri = URI("#{base_url}/api/users/update")
+    uri = build_uri("/api/users/update")
 
-    req = request(uri, user_params)
-    res = response(req, uri)
+    req = perform_request(uri, user_params)
 
-    response_code = res.code.to_i
-
-    flash_message(response_code,
-                  "Iterable user for #{@user.email} created successfully.",
-                  "Unable to create user.")
+    response(req, uri)
 
     # TODO: view the response object and display if possible
   end
 
   def create_event
     # track event API itself is used to create event
-    uri = URI("#{base_url}events/track")
+    uri = build_uri("events/track")
 
-    req = request(uri, event_params)
-    res = response(req, uri)
-
-    response_code = res.code.to_i
-
-    flash_message(response_code,
-                  "Iterable Event for #{@user.email} created successfully.",
-                  "Unable to create event.")
+    req = perform_request(uri, event_params)
+    response(req, uri)
 
     # TODO: view the response object and display if possible
   end
 
   def send_email
-    uri = URI("#{base_url}/api/email/target")
+    uri = build_uri("/api/email/target")
 
-    req = request(uri, email_params)
-    res = response(req, uri)
-
-    response_code = res.code.to_i
-
-    flash_message(response_code,
-                  "Email sent to user with email #{@user.email} successfully.",
-                  "Unable to send email.")
+    req = perform_request(uri, email_params)
+    response(req, uri)
 
     # TODO: view the response object and display if possible
   end
@@ -73,7 +56,11 @@ class IterableService
     res_code == 200 ? flash[:message] = success : flash[:error] = error
   end
 
-  def request(uri, params)
+  def build_uri(endpoint)
+    URI("#{BASE_URL}#{endpoint}")
+  end
+
+  def build_request(uri, params)
     req = Net::HTTP::Post.new(uri)
     req["Content-Type"] = "application/json"
     req["Api-Key"] = ENV["ITERABLE_API_KEY"]
@@ -81,6 +68,11 @@ class IterableService
     req.body = params.to_json
 
     req
+  end
+
+  def perform_request(uri, params)
+    request = build_request(uri, params)
+    response(request, uri)
   end
 
   def response(request, uri)

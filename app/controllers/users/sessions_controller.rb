@@ -1,4 +1,6 @@
 class Users::SessionsController < Devise::SessionsController
+  extend FlashHelper
+
   layout "application"
 
   def new
@@ -10,7 +12,7 @@ class Users::SessionsController < Devise::SessionsController
       if user.persisted?
         # TODO: add flash message if required
       else
-        flash[:error] = "Unable to sign-in"
+        flash_error("Sign-in failed.")
       end
     end
   end
