@@ -3,7 +3,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     super do |user|
       if user.persisted?
         iterable_service = IterableService.new(user)
-        iterable_service.create_user!
+        iterable_service.create_user
       else
         flash[:error] = "Unable to sign-up"
       end

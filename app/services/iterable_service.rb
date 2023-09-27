@@ -15,9 +15,13 @@ class IterableService
     req = request(uri, user_params)
     res = response(req, uri)
 
-    flash_message(res.code.to_i,
+    response_code = res.code.to_i
+
+    flash_message(response_code,
                   "Iterable user for #{@user.email} created successfully.",
                   "Unable to create user.")
+
+    # TODO: view the response object and display if possible
   end
 
   def create_event
@@ -27,9 +31,13 @@ class IterableService
     req = request(uri, event_params)
     res = response(req, uri)
 
-    flash_message(res.code.to_i,
+    response_code = res.code.to_i
+
+    flash_message(response_code,
                   "Iterable Event for #{@user.email} created successfully.",
                   "Unable to create event.")
+
+    # TODO: view the response object and display if possible
   end
 
   def send_email
@@ -38,9 +46,13 @@ class IterableService
     req = request(uri, email_params)
     res = response(req, uri)
 
-    flash_message(res.code.to_i,
+    response_code = res.code.to_i
+
+    flash_message(response_code,
                   "Email sent to user with email #{@user.email} successfully.",
                   "Unable to send email.")
+
+    # TODO: view the response object and display if possible
   end
 
   private
@@ -58,7 +70,7 @@ class IterableService
   end
 
   def flash_message(res_code, success, error)
-    flash[:message] = res_code == 200 ? success : error
+    res_code == 200 ? flash[:message] = success : flash[:error] = error
   end
 
   def request(uri, params)
