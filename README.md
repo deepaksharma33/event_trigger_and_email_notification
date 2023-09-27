@@ -26,6 +26,16 @@ bundle install
 ### Start Server
 To start rails server
 ```bash
-rails server
+bundle exec rails server
 
+```
+
+### URL (local)
+```bash
+http://localhost:3000/
+```
+
+### Run RSpecs
+```bash
+bundle exec rspec
 ```

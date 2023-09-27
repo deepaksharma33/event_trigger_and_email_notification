@@ -42,6 +42,6 @@ class Users::EventsController < ApplicationController
   def handle_response(response, success_message, error_message)
     response_code = response[:code].to_i
 
-    response_code == 200 ? flash_success(success_message) : flash_error(error_message)
+    response_code == 200 ? flash[:message] = success_message : flash[:error] = error_message
   end
 end
