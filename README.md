@@ -39,3 +39,9 @@ http://localhost:3000/
 ```bash
 bundle exec rspec
 ```
+
+### Note:
+untill the API-Key is recieved we can add a `.env` file in the root of the application and paste the following snippet
+```
+ITERABLE_API_KEY=test123
+```
