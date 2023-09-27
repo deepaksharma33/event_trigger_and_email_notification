@@ -1,6 +1,4 @@
 class Users::RegistrationsController < Devise::RegistrationsController
-  extend ResponseHelper
-
   def create
     super do |user|
       if user.persisted?
@@ -11,8 +9,24 @@ class Users::RegistrationsController < Devise::RegistrationsController
                         "Iterable user created successfully.",
                         "Iterable user creation failed.")
       else
-        flash_error("Sign-up failed.")
+        flash[:error] = "Sign-up failed."
       end
     end
+  end
+
+  private
+
+  def handle_response(response, success_message, error_message)
+    response_code = response[:code].to_i
+
+    response_code == 200 ? flash_success(success_message) : flash_error(error_message)
+  end
+
+  def flash_success(message)
+    flash[:message] = message
+  end
+
+  def flash_error(err)
+    flash[:error] = err
   end
 end

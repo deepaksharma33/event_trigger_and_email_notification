@@ -1,5 +1,5 @@
 class Users::EventsController < ApplicationController
-  around_create :check_to_send_email
+  after_action :check_to_send_email, only: :create, if: :send_email?
 
   def create
     response = iterable_service.create_event
@@ -12,11 +12,11 @@ class Users::EventsController < ApplicationController
   private
 
   def user
-    @user ||= User.find(event_params.user_id)
+    @user ||= User.find(event_params[:user_id])
   end
 
   def iterable_service
-    @iterable_service ||= IterableService.new(user, event_params.event_name)
+    @iterable_service ||= IterableService.new(user, event_params[:event_name])
   end
 
   def event_params
@@ -24,13 +24,11 @@ class Users::EventsController < ApplicationController
   end
 
   def check_to_send_email
-    yield
-
-    send_email if send_email?
+    send_email
   end
 
   def send_email?
-    event_params.event_name == "B" && flash[:error].blank?
+    event_params[:event_name] == "B" && flash[:error].blank?
   end
 
   def send_email
@@ -39,5 +37,11 @@ class Users::EventsController < ApplicationController
     handle_response(response,
                     "Email sent to user with email #{@user.email} successfully.",
                     "Unable to send email.")
+  end
+
+  def handle_response(response, success_message, error_message)
+    response_code = response[:code].to_i
+
+    response_code == 200 ? flash_success(success_message) : flash_error(error_message)
   end
 end

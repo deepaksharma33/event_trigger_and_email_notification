@@ -12,30 +12,20 @@ class IterableService
     # update user API itself is used to create user
     uri = build_uri("/api/users/update")
 
-    req = perform_request(uri, user_params)
-
-    response(req, uri)
-
-    # TODO: view the response object and display if possible
+    perform_request(uri, user_params)
   end
 
   def create_event
     # track event API itself is used to create event
     uri = build_uri("events/track")
 
-    req = perform_request(uri, event_params)
-    response(req, uri)
-
-    # TODO: view the response object and display if possible
+    perform_request(uri, event_params)
   end
 
   def send_email
     uri = build_uri("/api/email/target")
 
-    req = perform_request(uri, email_params)
-    response(req, uri)
-
-    # TODO: view the response object and display if possible
+    perform_request(uri, email_params)
   end
 
   private
@@ -76,7 +66,7 @@ class IterableService
   end
 
   def response(request, uri)
-    Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+    Net::HTTP.start(uri.hostname, uri.port) do |http|
       http.request(request)
     end
   end

@@ -1,6 +1,4 @@
 class Users::SessionsController < Devise::SessionsController
-  extend FlashHelper
-
   layout "application"
 
   def new
@@ -15,5 +13,11 @@ class Users::SessionsController < Devise::SessionsController
         flash_error("Sign-in failed.")
       end
     end
+  end
+
+  private
+
+  def flash_error(err)
+    flash[:error] = err
   end
 end
