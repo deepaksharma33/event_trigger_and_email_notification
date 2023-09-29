@@ -17,7 +17,7 @@ class IterableService
 
   def create_event
     # track event API itself is used to create event
-    uri = build_uri("events/track")
+    uri = build_uri("/events/track")
 
     perform_request(uri, event_params)
   end

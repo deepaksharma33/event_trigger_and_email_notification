@@ -12,6 +12,7 @@ RSpec.describe Users::SessionsController, type: :controller do
     context 'with valid credentials' do
       it 'signs in the user' do
         post :create, params: { user: { email: user.email, password: user.password } }
+
         expect(response).to redirect_to(root_path)
         expect(controller.flash[:notice]).to be_present
       end
@@ -21,7 +22,7 @@ RSpec.describe Users::SessionsController, type: :controller do
       it 'does not sign in the user' do
         post :create, params: { user: { email: 'invalid@example.com', password: 'invalid_password' } }
 
-        expect(response.code).not_to eq('200')
+        expect(response).not_to have_http_status(:success)
       end
     end
   end
